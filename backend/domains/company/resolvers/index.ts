@@ -1,4 +1,6 @@
 import { CompanyService } from "../service";
+import companyLoader from './companyDataLoader'; // Import the DataLoader
+
 export default {
   Query: {
     async Users(parent: any, args: any, context: any, info: any): Promise<any> {
@@ -16,13 +18,22 @@ export default {
       const endIndex = page * calculatedPageSize;
     
       // Fetch users for the current page with pagination
-      const data = await _companyService.getUsersWithPagination(startIndex, endIndex, filter);
-    
+      const users = await _companyService.getUsersWithPagination(startIndex, endIndex, filter);
+      // Load companies for users using DataLoader
+      const userIds = users.map((user: any) => user.id);
+      const companies = await companyLoader.loadMany(userIds);
+
+      // Combine users and their companies in the response
+      const usersWithCompanies = users.map((user: any, index: any) => ({
+        ...user,
+        companies: companies[index],
+      }));
+
       // Calculate the total number of pages (totalOfPage)
       const totalOfPage = Math.ceil(totalRecords / calculatedPageSize);
     
       return {
-        data,
+        data: usersWithCompanies,
         meta: {
           totalOfPage,
           page,
