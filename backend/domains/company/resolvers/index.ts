@@ -4,7 +4,7 @@ import companyLoader from './companyDataLoader'; // Import the DataLoader
 export default {
   Query: {
     async Users(parent: any, args: any, context: any, info: any): Promise<any> {
-      const { page = 1, pageSize, filter } = args;
+      const { page , pageSize, filter } = args;
       const _companyService = new CompanyService();
     
       // Fetch the total number of users (totalRecords)
