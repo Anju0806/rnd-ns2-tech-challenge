@@ -1,8 +1,11 @@
 <script lang="ts">
+    import CreateUser from "./components/Createuser.svelte";
+
     import { onMount, setContext } from "svelte";
     import { gql } from "@apollo/client/core";
     import client from "./apollo/apollo";
     import Users from "./lib/Users.svelte";
+    import createUser from "./components/Createuser.svelte";
 
     export let users: any;
     export let page: number = 1;
@@ -63,12 +66,10 @@
 
 <main>
     <h1>Harvest Tech Challenge</h1>
-    <Users {users} />
-    
-   
+    <Users {users} />   
     <button on:click={loadPreviousPage} disabled={page === 1}>Previous</button>
-    <button on:click={loadNextPage} disabled={page === totalOfPage}>Next</button
-    >
+    <button on:click={loadNextPage} disabled={page === totalOfPage}>Next</button>
+    <CreateUser {createUser} />
 </main>
 
 <style>
